@@ -27,7 +27,7 @@ namespace Testing
 
         public void UpdateProduct(Product product)
         {
-            _conn.Execute("UPDATE PRODUCTS SET Name = @name, Price = @price, WHERE ProductID = @id", 
+            _conn.Execute("UPDATE PRODUCTS SET Name = @name, Price = @price WHERE ProductID = @id", 
                 new {name = product.Name, price = product.Price, id = product.ProductID});
         }
 
@@ -46,6 +46,13 @@ namespace Testing
             var product = new Product();
             product.Categories = categoryList;
             return product;
+        }
+
+        public void DeleteProduct(Product product)
+        {
+            _conn.Execute("DELETE FROM PRODUCTS WHERE ProductID = @prodid;", new {prodid = product.ProductID});
+            _conn.Execute("DELETE FROM REVIEWS WHERE ProductID = @prodid;", new {prodid = product.ProductID});
+            _conn.Execute("DELETE FROM SALES WHERE ProductID = @prodid;", new {prodid = product.ProductID});
         }
     }
 }
